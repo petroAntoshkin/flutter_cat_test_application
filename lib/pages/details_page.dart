@@ -6,11 +6,12 @@ import 'package:provider/provider.dart';
 
 class DetailPage extends StatefulWidget {
   DetailPage(
-      {@required this.cat, @required this.callback, @required this.fact});
+      {@required this.cat, @required this.callback, @required this.fact, @required this.filePath});
 
   final CatModel cat;
   final String fact;
   final VoidCallback callback;
+  final String filePath;
 
   @override
   _DetailPageState createState() => _DetailPageState();
@@ -33,6 +34,7 @@ class _DetailPageState extends State<DetailPage> {
                 photo: widget.cat.imageUrl,
                 width: MediaQuery.of(context).size.width * 0.8,
                 onTap: () => Navigator.of(context).pop(),
+                filePath: widget.filePath,
               ),
               Text(widget.fact),
             ],

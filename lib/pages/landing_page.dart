@@ -14,10 +14,10 @@ class _LandingPageState extends State<LandingPage> {
   @override
   Widget build(BuildContext context) {
     User _user = context.read<AuthBloc>().currentUser;
-    print('--------------------------landing page build');
+    // print('--------------------------landing page build');
     return BlocListener<AuthBloc, LoginState>(
       listener: (context, state) {
-        print('------------------ landing page listener');
+        // print('------------------ landing page listener');
         setState(() {});
       },
       child: _user == null

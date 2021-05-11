@@ -2,11 +2,14 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_cat_test_application/bloc/auth_bloc.dart';
+import 'package:flutter_cat_test_application/provider/cats_provider.dart';
+import 'package:provider/provider.dart';
 
 class ProfilePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final User _user = context.read<AuthBloc>().currentUser;
+    Provider.of<CatsProvider>(context).readCashedImages();
     return Container(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
@@ -54,16 +57,24 @@ class ProfilePage extends StatelessWidget {
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
                         Icon(Icons.logout),
                         Text('Logout'),
+                        Icon(Icons.logout),
                       ],
                     ),
                   ),
                 ),
               ),
             ),
-          )
+          ),
+          ElevatedButton(
+            onPressed: Provider.of<CatsProvider>(context, listen: false).savedImagesCount > 0
+                ?() => Provider.of<CatsProvider>(context, listen: false).deleteCashedImages()
+            : null,
+            child: Text('Clear cash'),
+          ),
         ],
       ),
     );
