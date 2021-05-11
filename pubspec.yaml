@@ -26,7 +26,7 @@ dependencies:
   provider: ^5.0.0
   bloc: ^7.0.0
   flutter_bloc: ^7.0.0
-#  flutter_launcher_icons: ^0.8.1
+  flutter_launcher_icons: ^0.9.0
   flutter_svg: ^0.22.0
   firebase_core: ^1.1.0
   firebase_auth: ^1.1.2
