@@ -1,50 +1,34 @@
-import 'dart:io';
-
+import 'package:cat_test_app/components/net_image/net_image.dart';
+import 'package:cat_test_app/managers/cash_manager.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_cat_test_application/provider/cats_provider.dart';
-import 'package:network_to_file_image/network_to_file_image.dart';
-import 'package:provider/provider.dart';
-// import 'package:cached_network_image/cached_network_image.dart';
 
 class PhotoHero extends StatelessWidget {
-  const PhotoHero({Key key, this.photo, this.onTap, this.width, this.filePath})
+  const PhotoHero({Key key, this.url, this.onTap, this.manager})
       : super(key: key);
 
-  final String photo;
+  final String url;
   final VoidCallback onTap;
-  final double width;
-  final String filePath;
+  final CashManager manager;
 
   Widget build(BuildContext context) {
-    final bool _netFlag = photo.contains('http');
-    return SizedBox(
-      width: width,
-      child: Hero(
-        tag: photo,
-        child: Material(
-          color: Colors.transparent,
-          child: InkWell(
-            onTap: onTap,
-            child: _netFlag 
-                ? Image(image:
-            NetworkToFileImage(
-                url: photo,
-                file: File(filePath),
-                debug: false),
-              loadingBuilder: (BuildContext context, Widget child,
-                  ImageChunkEvent loadingProgress) {
-                if (loadingProgress == null) return child;
-                return Center(
-                  child: LinearProgressIndicator(
-                    value: loadingProgress.expectedTotalBytes != null
-                        ? loadingProgress.cumulativeBytesLoaded /
-                        loadingProgress.expectedTotalBytes
-                        : null,
-                  ),
-                );
-              },
-            )
-            : Image.file(File(photo)),
+    final bool _isCashed = manager.isFileCashed(url);
+    void _callback() {
+      manager.addFileToCashList(url);
+    }
+
+    return Hero(
+      tag: url,
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: onTap,
+          child: CashableNetworkImage(
+            model: NetImageDataModel(
+              url: url,
+              isCashed: _isCashed,
+              file: manager.getCashFileFromUrl(url),
+              callback: _callback,
+            ),
           ),
         ),
       ),

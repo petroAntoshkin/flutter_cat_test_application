@@ -1,9 +1,10 @@
+import 'package:cat_test_app/bloc/auth_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_cat_test_application/bloc/auth_bloc.dart';
-import 'package:flutter_cat_test_application/pages/home_page.dart';
-import 'package:flutter_cat_test_application/pages/sign_in_page.dart';
+
+import 'home_page.dart';
+import 'sign_in_page.dart';
 
 class LandingPage extends StatefulWidget {
   @override

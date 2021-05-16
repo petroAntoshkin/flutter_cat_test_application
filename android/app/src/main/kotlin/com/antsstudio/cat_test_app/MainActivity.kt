@@ -1,4 +1,4 @@
-package com.example.flutter_cat_test_application
+package com.antsstudio.cat_test_app
 
 import io.flutter.embedding.android.FlutterActivity
 

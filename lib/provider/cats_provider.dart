@@ -2,68 +2,82 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
 
+import 'package:cat_test_app/managers/cash_manager.dart';
+import 'package:cat_test_app/models/cat_model.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_cat_test_application/models/cat_model.dart';
 import 'package:http/http.dart';
+import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:connectivity/connectivity.dart';
 
 class CatsProvider extends ChangeNotifier {
   Directory _appDirectory;
-  List<String> _cashedImagesList;
-  // final String _cashImagesJson = '/images.json';
+  CashManagerImplementation _cashManager;
 
   Map<String, CatModel> _allCats;
   List<String> _facts = [];
   bool _haveAnInternet = true;
+  bool _requestInProgress = false;
   final Uri _catsFactsUrl =
       Uri.https('catfact.ninja', '/facts', {'limit': '3', 'max_length': '200'});
 
   final Uri _catsImagesUrl =
       Uri.https('api.thecatapi.com', '/v1/images/search', {
     'size': 'med',
-    'mime_types': 'png',
+    // 'mime_types': 'png',
     'limit': '5',
     'x-api-key': '24a960cb-3320-46d8-b3ef-6fb42d5e2df9'
   });
 
   CatsProvider() {
     _factMock();
+    _initCashFolder();
     _checkConnection();
     // _getFacts();
   }
 
   void _checkConnection() async {
-    _appDirectory = await getApplicationDocumentsDirectory();
-    _applyCashedInfo();
-    _haveAnInternet = true;
-    var connectivityResult = await (Connectivity().checkConnectivity());
-    if (connectivityResult == ConnectivityResult.none) {
+    _haveAnInternet = false;
+    try {
+      _haveAnInternet = await InternetConnectionChecker().hasConnection;
+    } on Exception {
       _haveAnInternet = false;
-      _applyCashedInfo();
-    } else {
-      _getCatsImages();
     }
-    readCashedImages();
-    //print('internet connection is $_haveAnInternet');
+    if(_haveAnInternet) _getCatsImages();
+    notifyListeners();
+    InternetConnectionChecker().onStatusChange.listen(
+          (InternetConnectionStatus status) {
+        switch (status) {
+          case InternetConnectionStatus.connected:
+            _haveAnInternet = true;
+            _getCatsImages();
+            break;
+          case InternetConnectionStatus.disconnected:
+            _haveAnInternet = false;
+            if(_cashManager != null) _applyCashedInfo();
+            break;
+        }
+        notifyListeners();
+      },
+    );
   }
 
   String get noImagesText => _haveAnInternet ? 'No images' : 'No internet connection';
 
   Future<void> _getCatsImages() async {
-    deleteCashedImages();
     _allCats = new Map();
-    // _parseResponseJson(jsonDecode(_testMock));
+    _requestInProgress = true;
     Response res;
     try {
       res = await get(_catsImagesUrl);
     } catch (e) {
       print(e.toString());
+    } finally{
+      _requestInProgress = false;
     }
 
     if (res.statusCode == 200) {
       // print('cats status ----- ${jsonDecode(res.body)}');
+      _cashManager.clearCash();
       _parseResponseJson(jsonDecode(res.body));
     } else {
       throw "Unable to retrieve posts.";
@@ -115,6 +129,8 @@ class CatsProvider extends ChangeNotifier {
       _allCats.forEach((key, value) {
         _res.putIfAbsent(key, () => value);
       });
+    if(_allCats != null)
+      if(_allCats.isEmpty && _haveAnInternet && !_requestInProgress) _getCatsImages();
     return _res;
   }
 
@@ -125,10 +141,6 @@ class CatsProvider extends ChangeNotifier {
         if (value.isFavorite) _res.putIfAbsent(key, () => value);
       });
     return _res;
-  }
-
-  CatModel getCatByIndex(int index) {
-    return _allCats[index];
   }
 
   CatModel getCatByID(String id) {
@@ -147,39 +159,34 @@ class CatsProvider extends ChangeNotifier {
 
   get appDirectory => _appDirectory.path;
 
-  ///////////// cashed images
+  //-------------------------- cash section-------------------------------
+
+  void _initCashFolder() async{
+    _appDirectory = await getApplicationDocumentsDirectory();
+    _cashManager = CashManagerImplementation(cashFolderString: '${_appDirectory.path}/cash/');
+    if(!_haveAnInternet) _applyCashedInfo();
+  }
+
+  CashManager get cashManager => _cashManager;
 
   void _applyCashedInfo(){
     _allCats = new Map();
-    readCashedImages();
-    if(_cashedImagesList.isNotEmpty){
-      for(int i = 0; i < _cashedImagesList.length; i++){
-        CatModel _cat = CatModel();
-        _cat.imageUrl = _cashedImagesList[i];
-        _cat.id = _cashedImagesList[i].split('/').last;
-        _allCats.putIfAbsent(_cat.id, () => _cat);
-      }
+    List<String> _all = _cashManager.getCashFiles();
+    for(int i = 0; i < _all.length; i++){
+      CatModel _cat = CatModel();
+      _cat.imageUrl = _all[i];
+      _cat.id = _cashManager.getFileNameFromUrl(_all[i]);
+      _allCats.putIfAbsent(_cat.id, () => _cat);
     }
-  }
-
-  void readCashedImages() {
-    List<FileSystemEntity> _list = _appDirectory.listSync();
-    _cashedImagesList = [];
-    for(int i = 0; i < _list.length; i++){
-      if(_list[i].path.contains(".png")) {
-        // print('read from local directory: ${_list[i].path}');
-        _cashedImagesList.add(_list[i].path);
-      }
-    }
-  }
-
-  void deleteCashedImages(){
-    readCashedImages();
-    for(int i = 0; i < _cashedImagesList.length; i++)
-      File(_cashedImagesList[i]).delete();
-    _cashedImagesList = [];
     notifyListeners();
   }
 
-  int get savedImagesCount => _cashedImagesList.length;
+  bool isFileCashed(String url) => _cashManager.isFileCashed(url);
+
+  void deleteCashedImages() {
+    _cashManager.clearCash();
+    _allCats = new Map();
+  }
+
+  int get savedImagesCount => _cashManager.cashedFilesCount;
 }

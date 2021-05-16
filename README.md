@@ -1,6 +1,6 @@
-# flutter_cat_test_application
+# cat_test_app
 
-A new Flutter application.
+Cat Test Application
 
 ## Getting Started
 

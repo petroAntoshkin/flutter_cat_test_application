@@ -1,17 +1,16 @@
+import 'package:cat_test_app/elements/photo_hero.dart';
+import 'package:cat_test_app/managers/cash_manager.dart';
+import 'package:cat_test_app/models/cat_model.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_cat_test_application/elements/photo_hero.dart';
-import 'package:flutter_cat_test_application/models/cat_model.dart';
-import 'package:flutter_cat_test_application/provider/cats_provider.dart';
-import 'package:provider/provider.dart';
 
 class DetailPage extends StatefulWidget {
   DetailPage(
-      {@required this.cat, @required this.callback, @required this.fact, @required this.filePath});
+      {@required this.cat, @required this.callback, @required this.fact, @required this.manager});
 
   final CatModel cat;
   final String fact;
   final VoidCallback callback;
-  final String filePath;
+  final CashManager manager;
 
   @override
   _DetailPageState createState() => _DetailPageState();
@@ -31,10 +30,9 @@ class _DetailPageState extends State<DetailPage> {
           child: Column(
             children: [
               PhotoHero(
-                photo: widget.cat.imageUrl,
-                width: MediaQuery.of(context).size.width * 0.8,
+                url: widget.cat.imageUrl,
                 onTap: () => Navigator.of(context).pop(),
-                filePath: widget.filePath,
+                manager: widget.manager,
               ),
               Text(widget.fact),
             ],

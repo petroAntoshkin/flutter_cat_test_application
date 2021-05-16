@@ -1,41 +1,41 @@
 {
   "project_info": {
-    "project_number": "501659027159",
-    "project_id": "flutter-cat-test-applica-53e7c",
-    "storage_bucket": "flutter-cat-test-applica-53e7c.appspot.com"
+    "project_number": "621555412912",
+    "project_id": "cat-test-application",
+    "storage_bucket": "cat-test-application.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:501659027159:android:4491bccec6350895bc1292",
+        "mobilesdk_app_id": "1:621555412912:android:acb45b79fc4dc387aa7075",
         "android_client_info": {
-          "package_name": "com.example.flutter_cat_test_application"
+          "package_name": "com.antsstudio.cat_test_app"
         }
       },
       "oauth_client": [
         {
-          "client_id": "501659027159-crb675jod6kf6gsvfmne1qm6hmj5cf40.apps.googleusercontent.com",
+          "client_id": "621555412912-74krenvhd0c5icaa9jutikoqpjln1op1.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.example.flutter_cat_test_application",
-            "certificate_hash": "b0c4b064bb8436ab4ae41b658843ef16ec1b0d1c"
+            "package_name": "com.antsstudio.cat_test_app",
+            "certificate_hash": "f17350bd2534653bdbe5b669b4afda6b24213a2c"
           }
         },
         {
-          "client_id": "501659027159-pgs9srv2rte269mi6l005r25sf29rig0.apps.googleusercontent.com",
+          "client_id": "621555412912-9mt99d5namf50te1kljj83dvtok0h6i3.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyDsx1VemvKGVwFGYP88YKH9AMA_3J_9Ods"
+          "current_key": "AIzaSyBgGkj4Wqr5nCu8baoeW6HVnoTnN-HlvBg"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "501659027159-pgs9srv2rte269mi6l005r25sf29rig0.apps.googleusercontent.com",
+              "client_id": "621555412912-9mt99d5namf50te1kljj83dvtok0h6i3.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

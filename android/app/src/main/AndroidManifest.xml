@@ -1,10 +1,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.flutter_cat_test_application">
+    package="com.antsstudio.cat_test_app">
 
     <uses-permission android:name="android.permission.INTERNET"/>
 
     <application
-        android:label="Flutter Cat Test Application"
+        android:name="androidx.multidex.MultiDexApplication"
+        android:label="Cat Test Application"
         android:icon="@mipmap/launcher_icon">
         <activity
             android:name=".MainActivity"
@@ -36,6 +37,7 @@
             </intent-filter>
         </activity>
 
+
         <meta-data android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id"/>
 
@@ -53,7 +55,6 @@
                 <data android:scheme="@string/fb_login_protocol_scheme" />
             </intent-filter>
         </activity>
-
 
         <!-- Don't delete the meta-data below.
              This is used by the Flutter tool to generate GeneratedPluginRegistrant.java -->

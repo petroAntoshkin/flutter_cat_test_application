@@ -1,13 +1,11 @@
-import 'dart:convert';
-
 class CatModel {
   String id;
   String imageUrl;
   int imageWidth;
   int imageHeight;
-  bool isFavorite = false;
+  bool isFavorite;
 
-  CatModel({this.id, this.imageUrl, this.imageWidth, this.imageHeight, this.isFavorite});
+  CatModel({this.id, this.imageUrl, this.imageWidth, this.imageHeight, this.isFavorite = false});
 
   void parseJson(var contents){
     this.id = contents['id'];
