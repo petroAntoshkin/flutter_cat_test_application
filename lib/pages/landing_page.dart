@@ -1,3 +1,4 @@
+
 import 'package:cat_test_app/bloc/auth_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -19,7 +20,7 @@ class _LandingPageState extends State<LandingPage> {
     return BlocListener<AuthBloc, LoginState>(
       listener: (context, state) {
         // print('------------------ landing page listener');
-        setState(() {});
+        setState(() { _user = state.user;});
       },
       child: _user == null
           ? SignInPage()

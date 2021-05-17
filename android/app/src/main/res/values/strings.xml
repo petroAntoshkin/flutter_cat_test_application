@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Cat Test Application</string>
-    <string name="facebook_app_id">817935915481213</string>
-    <string name="fb_login_protocol_scheme">fb817935915481213</string>
+    <string name="facebook_app_id">4138039346254459</string>
+    <string name="fb_login_protocol_scheme">fb4138039346254459</string>
+
 </resources>

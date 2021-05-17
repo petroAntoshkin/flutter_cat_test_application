@@ -33,15 +33,6 @@ class _ProfilePageState extends State<ProfilePage> {
                   color: Colors.grey[300],
                   shape: BoxShape.circle,
                 ),
-                // child: CashableNetworkImage(
-                //   model: NetImageDataModel(
-                //     url: _user.photoURL,
-                //     isCashed: false,
-                //     file: Provider.of<CatsProvider>(context, listen: false)
-                //         .getAvatarCashFile(_user.photoURL),
-                //     callback: null,
-                //   ),
-                // ),
 
                 child: _connection
                     ? Image.network(
@@ -77,22 +68,19 @@ class _ProfilePageState extends State<ProfilePage> {
           ),
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: Card(
-              color: Colors.white70,
-              child: ElevatedButton(
-                onPressed: () => context.read<AuthBloc>().add(LogOut()),
-                child: Container(
-                  color: Color(0x00ff00ff),
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        Icon(Icons.logout),
-                        Text('Logout'),
-                        Icon(Icons.logout),
-                      ],
-                    ),
+            child: ElevatedButton(
+              onPressed: () => context.read<AuthBloc>().add(LogOut()),
+              child: Container(
+                color: Color(0x00ff00ff),
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      Icon(Icons.logout),
+                      Text('Logout'),
+                      Icon(Icons.logout),
+                    ],
                   ),
                 ),
               ),
